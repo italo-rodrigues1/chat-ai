@@ -3,10 +3,10 @@
 import * as React from "react";
 import {
   Workflow,
-  Frame,
+  FileText,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
+  TableProperties,
+  FileAudio,
   Settings2,
   MessageSquareText,
   BookOpen,
@@ -94,19 +94,19 @@ const data = {
   ],
   actions: [
     {
-      name: "Design Engineering",
+      name: "PDF",
       url: "#",
-      icon: Frame,
+      icon: FileText,
     },
     {
-      name: "Sales & Marketing",
+      name: "Spreadsheet",
       url: "#",
-      icon: PieChart,
+      icon: TableProperties,
     },
     {
-      name: "Travel",
+      name: "Transcription",
       url: "#",
-      icon: Map,
+      icon: FileAudio,
     },
   ],
 };
