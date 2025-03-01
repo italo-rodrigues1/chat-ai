@@ -2,18 +2,18 @@
 
 import * as React from "react";
 import {
-  BookOpen,
-  Bot,
+  Workflow,
   Frame,
   GalleryVerticalEnd,
   Map,
   PieChart,
   Settings2,
-  SquareTerminal,
+  MessageSquareText,
+  BookOpen,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
+import { NavActions } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
@@ -23,6 +23,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { usePathname } from "next/navigation";
 
 const data = {
   user: {
@@ -32,73 +33,39 @@ const data = {
   },
   teams: [
     {
-      name: "Kpmg",
+      name: "Faz o L",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
+      title: "Chat",
+      url: "/",
+      icon: MessageSquareText,
+      isCollaped: false,
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      title: "Flow",
+      url: "/flow",
+      icon: Workflow,
+      isCollaped: false,
     },
     {
-      title: "Documentation",
-      url: "#",
+      title: "Library",
+      url: "/",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Prompt",
           url: "#",
         },
         {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "Tools",
           url: "#",
         },
       ],
+      isCollaped: true,
     },
     {
       title: "Settings",
@@ -122,9 +89,10 @@ const data = {
           url: "#",
         },
       ],
+      isCollaped: true,
     },
   ],
-  projects: [
+  actions: [
     {
       name: "Design Engineering",
       url: "#",
@@ -144,14 +112,20 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+
+  if (pathname === "/login") {
+    return null;
+  }
+
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <NavActions actions={data.actions} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
