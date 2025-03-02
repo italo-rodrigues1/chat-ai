@@ -29,7 +29,7 @@ const data = {
   user: {
     name: "italo",
     email: "italodevezero@hotmail.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "",
   },
   teams: [
     {
@@ -69,7 +69,7 @@ const data = {
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings2,
       items: [
         {
@@ -78,10 +78,6 @@ const data = {
         },
         {
           title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
           url: "#",
         },
         {

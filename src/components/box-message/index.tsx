@@ -10,7 +10,7 @@ export default function BoxMessage() {
     },
   ];
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 h-[76%] w-[100%] max-w-[800px]">
       {message.map((msg, index) => (
         <div
           key={index}
