@@ -3,13 +3,17 @@
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Paperclip } from "lucide-react";
+import { Paperclip, SendHorizontal, Send } from "lucide-react";
+import { useChatStore } from "@/store/chat";
 
 type FileWithName = {
   name: string;
 };
 
 export default function InputBox() {
+  const addMessage = useChatStore((state) => state.addMessage);
+
+  const [text, setText] = useState("");
   const [files, setFiles] = useState<FileWithName[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +23,14 @@ export default function InputBox() {
         ...prevFiles,
         ...newFiles.map((file) => ({ name: file.name })),
       ]);
+    }
+  };
+
+  const handleSend = () => {
+    if (text.trim()) {
+      console.log("text", text);
+      addMessage({ role: "user", content: text });
+      setText("");
     }
   };
 
@@ -32,34 +44,50 @@ export default function InputBox() {
             "resize-none text-lg p-4 !outline-none !ring-0 !shadow-none"
           )}
           placeholder="O que você deseja?"
+          onChange={(e) => setText(e.target.value)}
           style={{ outline: "none", boxShadow: "none" }}
         />
-        <div className="flex items-center gap-2">
-          <label
-            htmlFor="file-upload"
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <label
+              htmlFor="file-upload"
+              className={cn(
+                "flex items-center justify-center",
+                "w-10 h-10 rounded-full",
+                "bg-gray-800 hover:bg-gray-700",
+                "border border-gray-600",
+                "cursor-pointer transition-colors",
+                "text-white"
+              )}
+            >
+              <Paperclip className="w-5 h-5" />
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              className="hidden"
+              multiple
+              onChange={handleFileChange}
+            />
+            <span className="text-gray-400 text-sm truncate max-w-[300px]">
+              {files.map((file) => (
+                <span key={file.name}>{file.name} | </span>
+              ))}
+            </span>
+          </div>
+          <button
+            onClick={handleSend}
             className={cn(
-              "flex items-center justify-center",
-              "w-10 h-10 rounded-full",
-              "bg-gray-800 hover:bg-gray-700",
+              "flex items-center justify-center gap-[10px]",
+              "p-[5px] rounded-[5px]",
+              "bg-gray-700 hover:bg-gray-600",
               "border border-gray-600",
               "cursor-pointer transition-colors",
               "text-white"
             )}
           >
-            <Paperclip className="w-5 h-5" />
-          </label>
-          <input
-            id="file-upload"
-            type="file"
-            className="hidden"
-            multiple
-            onChange={handleFileChange}
-          />
-          <span className="text-gray-400 text-sm truncate max-w-[300px]">
-            {files.map((file) => (
-              <span key={file.name}>{file.name} | </span>
-            ))}
-          </span>
+            Enviar <Send className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>
