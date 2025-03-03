@@ -1,10 +1,24 @@
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
-// import { Brain, UserRound } from "lucide-react";
 import { useChatStore } from "@/store/chat";
+import { useWebSocket } from "@/hooks/use-websocket";
 
 export default function BoxMessage() {
+  const socket = useWebSocket();
+  const addMessage = useChatStore((state) => state.addMessage);
   const messages = useChatStore((state) => state.messages);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("chat-message", (msg: string) => {
+        addMessage({ role: "assistant", content: msg });
+      });
+
+      return () => {
+        socket.off("chat-message");
+      };
+    }
+  }, []);
 
   useEffect(() => {
     console.log("messages: ", messages);
@@ -27,9 +41,6 @@ export default function BoxMessage() {
             msg.role === "user" ? "justify-end" : "justify-start"
           )}
         >
-          {/* {msg.role === "assistant" && (
-            <Brain className="w-[40px] h-[40px] text-gray-400 mt-1 flex-shrink-0" />
-          )} */}
           <div
             className={cn(
               "max-w-[70%] p-3 rounded-lg text-sm",
@@ -40,9 +51,6 @@ export default function BoxMessage() {
           >
             {msg.content}
           </div>
-          {/* {msg.role === "user" && (
-            <UserRound className="w-[40px] h-[40px] text-blue-400 mt-1 flex-shrink-0" />
-          )} */}
         </div>
       ))}
     </div>

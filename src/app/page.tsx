@@ -1,13 +1,38 @@
 "use client";
 
-import BoxMessage from "@/components/box-message";
-import InputBox from "@/components/input-box";
+import { GalleryVerticalEnd } from "lucide-react";
 
-export default function Home() {
+import { LoginForm } from "@/components/login-form";
+import { useWebSocket } from "@/hooks/use-websocket";
+import { useEffect } from "react";
+
+export default function LoginPage() {
+  const socket = useWebSocket();
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("connect", () => {
+        console.log("Conectado ao WebSocket");
+        socket.emit("join", { userId: "usuario123" });
+      });
+
+      socket.on("disconnect", () => {
+        console.log("Desconectado do WebSocket");
+      });
+    }
+  }, [socket]);
+
   return (
-    <div className="flex flex-col justify-center items-center h-screen w-[100%] pr-6">
-      <BoxMessage />
-      <InputBox />
+    <div className="flex min-h-svh w-[100%] flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+      <div className="flex w-full max-w-sm flex-col gap-6">
+        <a href="#" className="flex items-center gap-2 self-center font-medium">
+          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+            <GalleryVerticalEnd className="size-4" />
+          </div>
+          Chat AI
+        </a>
+        <LoginForm />
+      </div>
     </div>
   );
 }
