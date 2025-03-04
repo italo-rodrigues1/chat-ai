@@ -3,11 +3,11 @@
 import { GalleryVerticalEnd } from "lucide-react";
 
 import { LoginForm } from "@/components/login-form";
-import { useWebSocket } from "@/hooks/use-websocket";
+import useSocket from "@/hooks/use-websocket";
 import { useEffect } from "react";
 
 export default function LoginPage() {
-  const socket = useWebSocket();
+  const { socket } = useSocket("localhost:3344");
 
   useEffect(() => {
     if (socket) {

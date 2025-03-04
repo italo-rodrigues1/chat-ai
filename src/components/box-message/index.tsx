@@ -1,10 +1,11 @@
+"use client";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useChatStore } from "@/store/chat";
-import { useWebSocket } from "@/hooks/use-websocket";
+import useSocket from "@/hooks/use-websocket";
 
 export default function BoxMessage() {
-  const socket = useWebSocket();
+  const { socket } = useSocket("localhost:3344");
   const addMessage = useChatStore((state) => state.addMessage);
   const messages = useChatStore((state) => state.messages);
 
