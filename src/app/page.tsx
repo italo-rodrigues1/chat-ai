@@ -3,25 +3,9 @@
 import { GalleryVerticalEnd } from "lucide-react";
 
 import { LoginForm } from "@/components/login-form";
-import useSocket from "@/hooks/use-websocket";
 import { useEffect } from "react";
 
 export default function LoginPage() {
-  const { socket } = useSocket("localhost:3344");
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("connect", () => {
-        console.log("Conectado ao WebSocket");
-        socket.emit("join", { userId: "usuario123" });
-      });
-
-      socket.on("disconnect", () => {
-        console.log("Desconectado do WebSocket");
-      });
-    }
-  }, [socket]);
-
   return (
     <div className="flex min-h-svh w-[100%] flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
