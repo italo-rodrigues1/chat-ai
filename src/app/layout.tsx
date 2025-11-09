@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+// @ts-ignore: side-effect import of CSS without type declarations
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -16,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
