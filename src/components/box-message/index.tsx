@@ -31,7 +31,7 @@ export default function BoxMessage() {
 
   return (
     <div
-      className="flex flex-col-reverse gap-4 h-[76%] w-[100%] max-w-[800px] overflow-y-auto message-container pb-[50px]"
+      className="flex flex-col gap-4 h-[76%] w-[100%] max-w-[800px] overflow-y-auto message-container pb-[50px]"
       style={{ scrollbarWidth: "thin", scrollbarColor: "#4A5568 #1A202C" }}
     >
       {messages.map((msg, index) => (

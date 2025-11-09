@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,26 +10,77 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { Login } from "@/lib/actions/auth";
+import { useState } from "react";
+import { api } from "@/service/axios";
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isRegister, setIsRegister] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const cleanFields = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      alert("Please enter email or password");
+      return;
+    }
+    try {
+      setIsLoading(true);
+      await api.post("/auth/find/user", { email, password });
+      router.push("/chat");
+    } catch (error) {
+      alert("Error logging in, please check your credentials.");
+    } finally {
+      cleanFields();
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !email || !password) {
+      alert("Please enter name, email or password");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await api.post("/auth/create", { name, email, password });
+      router.push("/chat");
+    } catch (error: AxiosError | any) {
+      alert("Error:" + error.response?.data?.message[0] || error);
+    } finally {
+      cleanFields();
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>
-            Login with your Apple or Google account
-          </CardDescription>
+          <CardDescription>Login with your account</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <div className="grid gap-6">
-              <div className="flex flex-col gap-4">
-                <Button variant="outline" className="w-full">
+              {/* <div className="flex flex-col gap-4">
+                <Button variant="outline" className="w-full" disabled>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
                       d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"
@@ -40,6 +92,7 @@ export function LoginForm({
                 <Button
                   variant="outline"
                   className="w-full"
+                  disabled
                   // onClick={() => Login()}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -55,8 +108,22 @@ export function LoginForm({
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">
                   Or continue with
                 </span>
-              </div>
+              </div> */}
+
               <div className="grid gap-6">
+                {isRegister && (
+                  <div className="grid gap-2">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="John Doe"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                )}
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -64,29 +131,58 @@ export function LoginForm({
                     type="email"
                     placeholder="m@example.com"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2">
                   <div className="flex items-center">
                     <Label htmlFor="password">Password</Label>
-                    <a
+                    {/* <a
                       href="#"
                       className="ml-auto text-sm underline-offset-4 hover:underline"
                     >
                       Forgot your password?
-                    </a>
+                    </a> */}
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
-                <Button type="submit" className="w-full">
-                  Login
-                </Button>
+                {isRegister ? (
+                  <Button
+                    type="submit"
+                    className="w-full cursor-pointer"
+                    onClick={handleRegister}
+                    disabled={isLoading}
+                  >
+                    Register
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="w-full cursor-pointer"
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                  >
+                    Login
+                  </Button>
+                )}
               </div>
               <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
-                  Sign up
-                </a>
+                {isRegister
+                  ? "Already have an account? "
+                  : "Don't have an account? "}
+                <Button
+                  className="bg-transparent p-0 text-color font-medium underline underline-offset-4 hover:bg-transparent cursor-pointer"
+                  onClick={() => setIsRegister(!isRegister)}
+                >
+                  {isRegister ? "Sign in" : "Sign up"}
+                </Button>
               </div>
             </div>
           </form>

@@ -41,7 +41,7 @@ const data = {
   navMain: [
     {
       title: "Chat",
-      url: "/",
+      url: "/chat",
       icon: MessageSquareText,
       isCollaped: false,
     },
@@ -53,7 +53,7 @@ const data = {
     },
     {
       title: "Library",
-      url: "/",
+      url: "/library",
       icon: BookOpen,
       items: [
         {
