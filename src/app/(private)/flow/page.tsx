@@ -1,11 +1,11 @@
 "use client";
-import { useState, useCallback } from "react";
 import {
   ReactFlow,
-  applyNodeChanges,
-  applyEdgeChanges,
   addEdge,
+  applyEdgeChanges,
+  applyNodeChanges,
 } from "@xyflow/react";
+import { useCallback, useState } from "react";
 // @ts-ignore - CSS side-effect import without type declarations
 import "@xyflow/react/dist/style.css";
 
@@ -69,7 +69,8 @@ export default function Flow() {
   );
 
   return (
-    <div>
+    <div className="h-[100vh] w-[100%]">
+      <span>FLOW</span>
       <ReactFlow
         nodes={nodes}
         edges={edges}

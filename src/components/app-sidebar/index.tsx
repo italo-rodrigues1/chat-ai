@@ -1,16 +1,16 @@
 "use client";
 
-import * as React from "react";
 import {
-  Workflow,
+  BookOpen,
+  FileAudio,
   FileText,
   GalleryVerticalEnd,
-  TableProperties,
-  FileAudio,
-  Settings2,
   MessageSquareText,
-  BookOpen,
+  Settings2,
+  TableProperties,
+  Workflow,
 } from "lucide-react";
+import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavActions } from "@/components/nav-projects";
